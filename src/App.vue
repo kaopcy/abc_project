@@ -17,6 +17,8 @@
     <div class="w-full h-screen flex flex-col justify-center items-cennter  ">
       <p id="para" class="logo-1  ">{{ coloredString }}</p>
     </div>
+    <div style="fontSize:500px; color:red">hello my name is kao</div>
+    
   </div>
 </template>
 
@@ -37,21 +39,30 @@ export default {
       myTrack: new Audio(),
       letter: json.letters,
       i: 0,
-      j: 4,
+      j: 10,
+      
       stop: false,
       thisString: [],
       coloredString: [],
       isPlay: false,
       currentSound: "",
+      array: [],
     };
   },
   methods: {
-    testEvent() {
-      document.getElementById("testEvent").innerHTML = " hello test is work !";
-    },
-    clear() {},
-    onClock(value) {
-      this.time = value;
+    random(min,max,array) {
+    var i = Math.floor(Math.random()*(max-min+1))+min;
+      for (let j = 0 ; j < array.length ; ){
+          if(i === array[j]){
+              i = Math.floor(Math.random()*(max-min+1))+min;
+              j = 0;
+          }
+          else{
+              j++;
+          }
+      }
+      array.push(i);
+      return i;
     },
     playSound() {
       this.makeString();
@@ -67,7 +78,7 @@ export default {
             this.i++;
             if (this.i > this.letter[this.j].length - 1) {
               this.i = 0;
-              this.j++;
+              
               this.thisString = [];
               this.coloredString = [];
               this.isPlay = false;
@@ -76,7 +87,7 @@ export default {
             if (!this.stop) {
               setTimeout(()=>{
                 this.playSound();
-              },1)
+              },100)
             }
           }.bind(this)
         );
@@ -114,13 +125,26 @@ export default {
       }
       for (let index = 0; index < this.thisString.length; index++) {
         if (this.coloredString[index] == "blue") {
-          let lastStrings =
-            "<sup style='color: " +
-            this.coloredString[index] +
-            ";'>" +
-            this.thisString[index] +
-            "</sup>";
-          lastString.push(lastStrings);
+          
+            if(this.thisString[index-1] === 'ั' ||this.thisString[index-1] === 'ิ'||this.thisString[index-1] === 'ี'||this.thisString[index-1] === 'ึ'  || this.thisString[index-1] === 'ื'){
+              let lastStrings =
+              "<sup style='fontSize:10px !important ; color: " +
+              this.coloredString[index] +
+              ";  '>" +
+              this.thisString[index] +
+              "</sup>";
+              lastString.push(lastStrings);
+            }
+            else{
+              let lastStrings =
+              "<span style='color: " +
+              this.coloredString[index] +
+              ";'>" +
+              this.thisString[index] +
+              "</span>";
+              lastString.push(lastStrings);
+            }
+          
         } else if (this.coloredString[index] == "green") {
           let lastStrings =
             "<span style='color: " +
@@ -153,6 +177,8 @@ export default {
     this.i = 0;
     window.addEventListener("keypress", () => {
       if (!this.isPlay) {
+        this.j++
+        console.log("Okay this is a track that is currentluy played   "+this.j)
         this.playSound();
         this.continuePlay();
       }
@@ -202,7 +228,7 @@ body {
 }
 
 p {
-  font-size: 400px;
+  font-size: 150px;
   text-transform: uppercase;
   font-family: "Archivo Black", "Archivo", sans-serif;
   font-weight: normal;
@@ -222,35 +248,6 @@ sup {
 }
 
 @keyframes neon {
-  0% {
-    text-shadow: -1px -1px 1px var(--shadow-color-light),
-      -1px 1px 1px var(--shadow-color-light),
-      1px -1px 1px var(--shadow-color-light),
-      1px 1px 1px var(--shadow-color-light), 0 0 3px var(--shadow-color-light),
-      0 0 10px var(--shadow-color-light), 0 0 20px var(--shadow-color-light),
-      0 0 30px var(--shadow-color), 0 0 40px var(--shadow-color),
-      0 0 50px var(--shadow-color), 0 0 70px var(--shadow-color),
-      0 0 100px var(--shadow-color), 0 0 200px var(--shadow-color);
-  }
-  50% {
-    text-shadow: -1px -1px 1px var(--shadow-color-light),
-      -1px 1px 1px var(--shadow-color-light),
-      1px -1px 1px var(--shadow-color-light),
-      1px 1px 1px var(--shadow-color-light), 0 0 5px var(--shadow-color-light),
-      0 0 15px var(--shadow-color-light), 0 0 25px var(--shadow-color-light),
-      0 0 40px var(--shadow-color), 0 0 50px var(--shadow-color),
-      0 0 60px var(--shadow-color), 0 0 80px var(--shadow-color),
-      0 0 110px var(--shadow-color), 0 0 210px var(--shadow-color);
-  }
-  100% {
-    text-shadow: -1px -1px 1px var(--shadow-color-light),
-      -1px 1px 1px var(--shadow-color-light),
-      1px -1px 1px var(--shadow-color-light),
-      1px 1px 1px var(--shadow-color-light), 0 0 3px var(--shadow-color-light),
-      0 0 10px var(--shadow-color-light), 0 0 20px var(--shadow-color-light),
-      0 0 30px var(--shadow-color), 0 0 40px var(--shadow-color),
-      0 0 50px var(--shadow-color), 0 0 70px var(--shadow-color),
-      0 0 100px var(--shadow-color), 0 0 200px var(--shadow-color);
-  }
+ 
 }
 </style>

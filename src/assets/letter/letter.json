@@ -510,6 +510,122 @@
         }
 
        
+      ],
+      [
+        {
+          "char": "พ",
+          "color": "black",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":"0"
+          
+        },
+        {
+          "char": "เ",
+          "color": "green",
+          "source":"",
+          "swap":"1"
+        },
+        {
+          "char": "ิ",
+          "color": "green",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        },
+        {
+          "char": "ด",
+          "color": "red",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        },
+        {
+          "char": "",
+          "color": "",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        },
+        {
+          "char": "้",
+          "color": "blue",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":"1"
+        },
+        {
+          "char": "",
+          "color": "",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        }
+
+      ],
+      [
+        {
+          "char": "พ",
+          "color": "black",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        },
+        {
+          "char": "เ",
+          "color": "green",
+          "source":"",
+          "swap":"1"
+        },
+        {
+          "char": "ิ",
+          "color": "green",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        },
+        {
+          "char": "ร์",
+          "color": "yellow",
+          "source":"",
+          "swap":""
+        },
+        {
+          "char": "ธ",
+          "color": "red",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        }
+      ],
+      [
+        {
+          "char": "ม",
+          "color": "black",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        },
+        {
+          "char": "ื",
+          "color": "green",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        },
+        {
+          "char": "ง",
+          "color": "red",
+          "source":"",
+          "swap":""
+        },
+        {
+          "char": "ค์",
+          "color": "yellow",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        },
+        {
+          "char": "", 
+          "color": "",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":""
+        },
+        {
+          "char": "้",
+          "color": "blue",
+          "source":"sound/ตะกร้า/อา.mp3",
+          "swap":"2"
+        }
       ]
 
     ]
