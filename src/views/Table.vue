@@ -35,17 +35,15 @@
 </template>
 
 <script>
+import json from "@/assets/letter/letter.json";
+
 export default {
     name: "Table",
     props:{
     },
     data() {
         return {
-            peopleArray:[
-                
-                
-                
-            ],
+            letter:json.letters,
             Form:{
                 name:'',
                 phone:'',
@@ -53,6 +51,9 @@ export default {
         }
     },
     methods: {
+        addData(){
+            this.letter.router.push()
+        },
         handleSubmit(){
             const lastID = this.peopleArray.length;
             const id = lastID + 1;
@@ -68,67 +69,6 @@ export default {
 </script>
 
 <style>
-    :root{
-        --font: 18px;
-    }
-    .Font001{
-        padding: 5px;
-        margin-bottom: 20px;
-        color:chartreuse;
-        font-size: var(--font);
-        font-weight: 600;
-    }
-    table{
-        width:100%;
-        table-layout: fixed;
-    }
-    .tbl-header{
-        background-color: rgba(255,255,255,0.4);
-    }
-        .tbl-content{
-        height:300px;
-        overflow-x:auto;
-        margin-top: 0px;
-        border: 1px solid rgba(255,255,255,0.3);
-    }
-    th{
-        padding: 20px 15px;
-        text-align: left;
-        font-weight: 500;
-        font-size: var(--font);
-        color: #fff;
-        text-transform: uppercase;
-    }
-    td{
-        padding: 15px;
-        text-align: left;
-        vertical-align:middle;
-        font-weight: 400;
-        font-size: var(--font);
-        color: white;
-        border-bottom: solid 1px rgba(255,255,255,0.1);
-    }
-    @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
-    body{
-        background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-        background: linear-gradient(to right, #25c481, #25b7c4);
-        background-image: url('https://encrypted-https://gfycat.com/https://gfycat.com/blackandwhiteenergeticalbacoretuna://thumbs.gfycat.com/FlatDisguisedHake-mobile.mp4.gstatic.com/images?q=tbn:ANd9GcTsTIIh0d12-ITg2_XBslSxpQ8buBRjI1OMEA&usqp=CAU');
-        font-family: 'Roboto', sans-serif;
-        
-    }
-    section{
-        margin: 50px;
-    }
-    .button001{
-        font-weight: '900';
-                color: 'grey';
-                font-family: 'Open Sans';
-                font-size: '30px';
-                margin: '20px';
-                padding: '10px';
-                padding-right:'30px';
-                padding-left:'30px';
-                border-radius: '20px';
-    }
+    
 
 </style>
