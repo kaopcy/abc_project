@@ -1,35 +1,20 @@
 <template>
   <div>
+    <!-- display timer -->
     <div>
-      <timer />
-      <button ><router-link to= '/table'>Click to go to table</router-link></button>
-      <button ><router-link to= '/Home'>Click to go to Home</router-link></button>
-      <router-view></router-view>
-      <br>
-      <button
-        :class="!isPlay ? 'visible' : 'invisible'"
-        @click="
-          playSound();
-          continuePlay();
-        "
-      >
-        Click to play
-      </button>
-      <button @click="addData" class=" rounded-xl font-extrabold bg-yellow-700 place-items-center m-2 p-2 text-3xl text-white w-50  animate-bounce align-middle000">Click to add</button>
+      <timer v-bind:start-app="startApp" />
     </div>
-      <li id="hehehe" >{{testedString}}</li>
-
-    <div class="text_position" style="left: 30%;">
-
-      <p id="para" style="display: inline ">{{ coloredString }}</p>
+    <!-- display Real text -->
+    <div v-bind:style="styleObject">
+      <p id="para" style="display: inline; "></p>
     </div>
-    <!-- <span style='fontSize:9px  ; color: green;  '>ื</span>
-    <sup style='fontSize:7px  ; color: blue;  '>้</sup> -->
-    
+    <!-- display Temp text -->
+    <div  style="text-align: center;" >
+      <p id="para2" style="display: inline; "></p> 
+    </div>
+
   </div>
 </template>
-
-<style></style>
 
 <script>
 import json from "@/assets/letter/letter.json";
@@ -44,30 +29,33 @@ export default {
   data() {
     return {
       myTrack: new Audio(),
-      letter: json.letters,
-      i: 0,
-      j: 0,
+      letter: json.letters,     //Import json file
+      i: 0,                     //This integer for what number of alphabet in word              
+      j: 0,                     //This integer for what number of word
+      thisString: [],           //this is a main string of word
+      coloredString: [],        //this is a color string of word
+      isStop: false,            //this boolean will turn to true when finish render 1 word
+      isPlay: false,            //this boolean will turn to false when user press keyboard   
+      arrayPool: [],            //Use to collect rendered word
+      startApp:false,           //Boolean for sent data back to timer
       
-      stop: false,
-      thisString: [],
-      coloredString: [],
-      isPlay: false,
-      currentSound: "",
-      array: [],
-      fontSize:350,
-
-      testedString:"hi im ga"
-
+      //Text style 
+      fontSize:350,             //text size
+      styleObject: {
+        top: '116px',
+        color: 'blue',
+        position: 'fixed',
+        left: '666px',
+      },
     };
   },
+
   methods: {
-    addData(){
-      this.letter[0][0].char = 0
-    },
-    random(min,max,array) {
+    //To get random number from word pool
+    random(min,max,arrayPool) {
     var i = Math.floor(Math.random()*(max-min+1))+min;
-      for (let j = 0 ; j < array.length ; ){
-          if(i === array[j]){
+      for (let j = 0 ; j < arrayPool.length ; ){
+          if(i === arrayPool[j]){
               i = Math.floor(Math.random()*(max-min+1))+min;
               j = 0;
           }
@@ -76,51 +64,90 @@ export default {
           }
           
       }
-      array.push(i);
+      arrayPool.push(i);
       return i;
     },
+    // calculate percentage
     percent(input , percent){
       return input*percent/100
     },
+    //Core function
     playSound() {
       this.makeString();
-      console.log(this.stop);
-      if (this.letter[this.j][this.i].source !== "") {
+      if (this.letter[this.j][this.i].source !== "") {            //If there have source in file
         this.isPlay = true;
+        this.isStop = false;
         this.myTrack = new Audio();
-        this.myTrack.src = this.letter[this.j][this.i].source;
+        this.myTrack.src = this.letter[this.j][this.i].source;    //path
         this.myTrack.play();
-        this.myTrack.addEventListener(
+        this.myTrack.addEventListener(                            //when *1* alphabet ended
           "ended",
           function() {
             this.i++;
-            if (this.i > this.letter[this.j].length - 1) {
+            if (this.i > this.letter[this.j].length - 1) {        //If end of 1 word 
               this.i = 0;
-              
-              this.thisString = [];
+              this.thisString = [];                               //Reset both string and color
               this.coloredString = [];
               this.isPlay = false;
-              this.stop = true;
+              this.isStop = true;
             }
-            if (!this.stop) {
+            if (!this.isStop) {
               setTimeout(()=>{
                 this.playSound();
               },100)
             }
           }.bind(this)
         );
-      } else {
+      } 
+      else {
         this.i++;
-        if (!this.stop) this.playSound();
+        if (!this.isStop) this.playSound();
       }
     },
+    
     continuePlay() {
-      if (this.stop) {
-        this.stop = false;
+      if (this.isStop) {
+        this.isStop = false;
       }
     },
     makeString: function() {
       var para = document.getElementById("para");
+      var para2 = document.getElementById("para2");
+      var invisString = [];
+      var lastInvis = [];
+
+      for(let i = 0 ; i< this.letter[this.j].length ; i++){
+        if (this.letter[this.j][i].swap === "0") {
+          if (this.letter[this.j][i].char !== "") {
+            invisString.push(this.letter[this.j][i].char);
+          }
+        } 
+        else if (this.letter[this.j][i].swap !== "0") {
+          if (this.letter[this.j][i].char !== "") {
+            invisString = this.swap(
+              invisString,
+              this.letter[this.j][i].char,
+              this.letter[this.j][i].swap
+            );
+            
+          }
+        }
+      }
+      for (let index = 0; index < invisString.length; index++) {
+        
+          let lastInvis1 =
+            "<strong  style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; opacity:0% ; font-weight: 401 !important; color: " +
+            this.coloredString[index] +
+            ";'>" +
+            invisString[index] +
+            "</strong>";
+          lastInvis.push(lastInvis1);
+        
+      }
+
+      para2.innerHTML = lastInvis.join("")
+
+
       var lastString = [];
       if (this.letter[this.j][this.i].swap === "0") {
         if (this.letter[this.j][this.i].char !== "") {
@@ -185,10 +212,10 @@ export default {
       
       para.innerHTML = lastString.join("");
       var hehehe = document.getElementById("hehehe")
-      console.log("This text width = "+hehehe.clientWidth)
-      console.log("This text height = "+hehehe.clientHeight)
-      console.log("This text top = "+hehehe.clientTop)
-      console.log("This text left = "+hehehe.clientLeft)
+      
+      console.log("This text top = "+para2.offsetTop)
+      console.log("This text left = "+para2.offsetLeft)
+      this.styleObject.left = para2.offsetLeft + "px"
     },
     swap(thisstring, character, num) {
       thisstring.splice(thisstring.length - num, 0, character);
@@ -198,14 +225,15 @@ export default {
   mounted: function() {
     this.i = 0;
     window.addEventListener("keypress", () => {
+      if(!this.startApp) this.startApp = true
       var para = document.getElementById("para");
       this.thisString = []  
       this.coloredString= [],
-      para.innerHTML = "<span style='font-size:600px ;color:red ; textAlign: center;' >+</span>";
+      para.innerHTML = "<p style='font-size:"+ this.fontSize+"px ;color:red ;  text-align: center '>+</p>";
       setTimeout(()=>{
         
       if (!this.isPlay) {
-        this.j= this.random(0,this.letter.length,this.array)
+        this.j= this.random(0,this.letter.length,this.arrayPool)
           console.log("Okay this is a track that is currentluy played   "+this.j)
           this.playSound();
           this.continuePlay();
@@ -226,8 +254,10 @@ export default {
   box-sizing: border-box;
   font-family: 'Sarabun', sans-serif;
 }
-.text_position{
-  position:absolute;
+div.text_position{
+  position:static;
+  text-align: center;
+  font-size: 400px;
   
 }
 </style>
