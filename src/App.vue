@@ -6,11 +6,15 @@
     </div>
     <!-- display Real text -->
     <div v-bind:style="styleObject">
-      <p id="para" style="display: inline; "></p>
+      <div id="para" style="display: inline; top: 0px; width: 100%"></div>
     </div>
     <!-- display Temp text -->
     <div  style="text-align: center;" >
-      <p id="para2" style="display: inline; "></p> 
+      <div id="tempText" style="display: inline ; top: 0px; width: 100%"></div> 
+    </div>
+
+    <div v-if="!isPlay">
+      <p id="plus"></p>
     </div>
 
   </div>
@@ -45,7 +49,8 @@ export default {
         top: '116px',
         color: 'blue',
         position: 'fixed',
-        left: '666px',
+        left: '666px', 
+        
       },
     };
   },
@@ -104,20 +109,21 @@ export default {
         if (!this.isStop) this.playSound();
       }
     },
-    
+
     continuePlay() {
       if (this.isStop) {
         this.isStop = false;
       }
     },
+    //main fucntion for makeing string
     makeString: function() {
       var para = document.getElementById("para");
-      var para2 = document.getElementById("para2");
+      var tempText = document.getElementById("tempText");
       var invisString = [];
       var lastInvis = [];
-
-      for(let i = 0 ; i< this.letter[this.j].length ; i++){
-        if (this.letter[this.j][i].swap === "0") {
+      //******This for invisiblestring*******
+      for(let i = 0 ; i< this.letter[this.j].length ; i++){     //making array of invisible string
+        if (this.letter[this.j][i].swap === "0") {            
           if (this.letter[this.j][i].char !== "") {
             invisString.push(this.letter[this.j][i].char);
           }
@@ -133,10 +139,10 @@ export default {
           }
         }
       }
-      for (let index = 0; index < invisString.length; index++) {
+      for (let index = 0; index < invisString.length; index++) {    //makeing array of html text 
         
           let lastInvis1 =
-            "<strong  style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; opacity:0% ; font-weight: 401 !important; color: " +
+            "<strong  style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; opacity:1% ; font-weight: 401 !important; color: " +
             this.coloredString[index] +
             ";'>" +
             invisString[index] +
@@ -144,10 +150,9 @@ export default {
           lastInvis.push(lastInvis1);
         
       }
+      tempText.innerHTML = lastInvis.join("")
 
-      para2.innerHTML = lastInvis.join("")
-
-
+      //******This for RealString*******
       var lastString = [];
       if (this.letter[this.j][this.i].swap === "0") {
         if (this.letter[this.j][this.i].char !== "") {
@@ -190,7 +195,8 @@ export default {
               lastString.push(lastStrings);
             }
           
-        } else if (this.coloredString[index] == "green") {
+        } 
+        else if (this.coloredString[index] == "green") {
           let lastStrings =
             "<span style='font-size:"+(this.percent(this.fontSize , 100 )) +"px; color: " +
             this.coloredString[index] +
@@ -198,7 +204,8 @@ export default {
             this.thisString[index] +
             "</span>";
           lastString.push(lastStrings);
-        } else {
+        } 
+        else {
           let lastStrings =
             "<strong  style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
             this.coloredString[index] +
@@ -209,36 +216,42 @@ export default {
         }
       }
 
-      
       para.innerHTML = lastString.join("");
-      var hehehe = document.getElementById("hehehe")
+      this.styleObject.left = tempText.offsetLeft + "px"
       
-      console.log("This text top = "+para2.offsetTop)
-      console.log("This text left = "+para2.offsetLeft)
-      this.styleObject.left = para2.offsetLeft + "px"
     },
+    //this function use to swap array of string
     swap(thisstring, character, num) {
       thisstring.splice(thisstring.length - num, 0, character);
       return thisstring;
     },
+
   },
   mounted: function() {
-    this.i = 0;
-    window.addEventListener("keypress", () => {
-      if(!this.startApp) this.startApp = true
-      var para = document.getElementById("para");
-      this.thisString = []  
-      this.coloredString= [],
-      para.innerHTML = "<p style='font-size:"+ this.fontSize+"px ;color:red ;  text-align: center '>+</p>";
-      setTimeout(()=>{
-        
-      if (!this.isPlay) {
-        this.j= this.random(0,this.letter.length,this.arrayPool)
-          console.log("Okay this is a track that is currentluy played   "+this.j)
-          this.playSound();
-          this.continuePlay();
+    //add event when user interact with keyboard
+      window.addEventListener("keypress", (event) => {
+        console.log(this.isPlay)
+        if(event.code === 'Space'){
+          if(!this.startApp) this.startApp = true //To return that game start
+          if(!this.isPlay){
+
+            var para = document.getElementById("plus");
+            var para2 = document.getElementById("para");
+            var para3 = document.getElementById("tempText");
+            this.thisString = []  
+            this.coloredString= [],
+            para.innerHTML = "<p style='font-size:"+ this.fontSize+"px ;color:red ;  text-align: center '>+</p>";
+            para2.innerHTML = "";
+            para3.innerHTML = "";
+          }
+          setTimeout(()=>{
+          if (!this.isPlay) {
+              this.j= this.random(0,this.letter.length,this.arrayPool)
+              this.playSound();
+              this.continuePlay();
+            }
+          },2000)
         }
-      },2000)
     });
   },
 };
@@ -259,5 +272,12 @@ div.text_position{
   text-align: center;
   font-size: 400px;
   
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1080px;
+  border: 3px solid green; 
 }
 </style>
