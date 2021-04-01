@@ -6,7 +6,7 @@
     </div>
     <!-- display Real text -->
     <div v-bind:style="styleObject">
-      <div id="para" style="display: inline; top: 0px; width: 100%"></div>
+      <div id="para" style="display: inline; top: 0px; width: 100% ;  "></div>
     </div>
     <!-- display Temp text -->
     <div  style="text-align: center;" >
@@ -36,13 +36,14 @@ export default {
       letter: json.letters,     //Import json file
       i: 0,                     //This integer for what number of alphabet in word              
       j: 0,                     //This integer for what number of word
+      previusJ:0,
       thisString: [],           //this is a main string of word
       coloredString: [],        //this is a color string of word
       isStop: false,            //this boolean will turn to true when finish render 1 word
       isPlay: false,            //this boolean will turn to false when user press keyboard   
       arrayPool: [],            //Use to collect rendered word
       startApp:false,           //Boolean for sent data back to timer
-      
+      currentString: "",
       //Text style 
       fontSize:350,             //text size
       styleObject: {
@@ -50,7 +51,6 @@ export default {
         color: 'blue',
         position: 'fixed',
         left: '666px', 
-        
       },
     };
   },
@@ -58,10 +58,10 @@ export default {
   methods: {
     //To get random number from word pool
     random(min,max,arrayPool) {
-    var i = Math.floor(Math.random()*(max-min+1))+min;
+    var i = Math.floor(Math.random()*(max-min))+min;
       for (let j = 0 ; j < arrayPool.length ; ){
           if(i === arrayPool[j]){
-              i = Math.floor(Math.random()*(max-min+1))+min;
+              i = Math.floor(Math.random()*(max-min))+min;
               j = 0;
           }
           else{
@@ -95,6 +95,7 @@ export default {
               this.coloredString = [];
               this.isPlay = false;
               this.isStop = true;
+              console.log(this.currentString)
             }
             if (!this.isStop) {
               setTimeout(()=>{
@@ -110,11 +111,7 @@ export default {
       }
     },
 
-    continuePlay() {
-      if (this.isStop) {
-        this.isStop = false;
-      }
-    },
+    
     //main fucntion for makeing string
     makeString: function() {
       var para = document.getElementById("para");
@@ -142,7 +139,7 @@ export default {
       for (let index = 0; index < invisString.length; index++) {    //makeing array of html text 
         
           let lastInvis1 =
-            "<strong  style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; opacity:1% ; font-weight: 401 !important; color: " +
+            "<strong  style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; opacity:0% ; font-weight: 401 !important; color: " +
             this.coloredString[index] +
             ";'>" +
             invisString[index] +
@@ -151,6 +148,7 @@ export default {
         
       }
       tempText.innerHTML = lastInvis.join("")
+      this.currentString = invisString.join("")
 
       //******This for RealString*******
       var lastString = [];
@@ -197,17 +195,29 @@ export default {
           
         } 
         else if (this.coloredString[index] == "green") {
-          let lastStrings =
-            "<span style='font-size:"+(this.percent(this.fontSize , 100 )) +"px; color: " +
-            this.coloredString[index] +
-            ";'>" +
-            this.thisString[index] +
-            "</span>";
-          lastString.push(lastStrings);
+          if(this.thisString[index] === 'ั' ||this.thisString[index] === 'ิ'||this.thisString[index] === 'ี'||this.thisString[index] === 'ึ'  || this.thisString[index] === 'ื'){
+            let lastStrings =
+              "<span style='font-size:"+(this.percent(this.fontSize , 100 )) +"px; color: " +
+              this.coloredString[index] +
+              ";'>" +
+              this.thisString[index] +
+              "</span>";
+            lastString.push(lastStrings);
+          }
+          else{
+            let lastStrings =
+              "<span style='letterSpacing:20px; font-size:"+(this.percent(this.fontSize , 100 )) +"px; color: " +
+              this.coloredString[index] +
+              ";'>" +
+              this.thisString[index] +
+              "</span>";
+            lastString.push(lastStrings);
+          }
+
         } 
         else {
           let lastStrings =
-            "<strong  style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
+            "<strong  style='letterSpacing:20px; font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
             this.coloredString[index] +
             ";'>" +
             this.thisString[index] +
@@ -226,15 +236,30 @@ export default {
       return thisstring;
     },
 
+    readJson(){
+      const customer = require('./assets/letter/letter.json')
+      var log = customer.letters
+      console.log(log[0][0].char)
+      console.log(customer.src)
+    }
+
   },
   mounted: function() {
+    this.readJson()
     //add event when user interact with keyboard
       window.addEventListener("keypress", (event) => {
-        console.log(this.isPlay)
+        console.log(event.code)
+        if(event.code === 'KeyR'){
+          if(!this.isPlay)
+          console.log("restart")
+          this.j = this.previusJ
+          this.playSound();
+        }
         if(event.code === 'Space'){
+          console.log("play " + this.isPlay)
+          console.log("play " + this.isStop)
           if(!this.startApp) this.startApp = true //To return that game start
           if(!this.isPlay){
-
             var para = document.getElementById("plus");
             var para2 = document.getElementById("para");
             var para3 = document.getElementById("tempText");
@@ -243,15 +268,18 @@ export default {
             para.innerHTML = "<p style='font-size:"+ this.fontSize+"px ;color:red ;  text-align: center '>+</p>";
             para2.innerHTML = "";
             para3.innerHTML = "";
-          }
+            this.j= this.random(0,this.letter.length,this.arrayPool)
+            this.previusJ = this.j
           setTimeout(()=>{
+            
           if (!this.isPlay) {
-              this.j= this.random(0,this.letter.length,this.arrayPool)
               this.playSound();
-              this.continuePlay();
+              
             }
           },2000)
+          }
         }
+        
     });
   },
 };
@@ -279,5 +307,9 @@ div.text_position{
   align-items: center;
   height: 1080px;
   border: 3px solid green; 
+ 
+}
+strong{
+  letter-spacing:20px;
 }
 </style>

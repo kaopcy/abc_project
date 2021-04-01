@@ -70,18 +70,18 @@
           "swap":"0"
         },
         {
-          "char": "แ",
-          "color": "green",
-          "source":"sound/แคร่/แอ.mp3",
-          "swap":"1"
-        },
-  
-        {
           "char": "ร",
           "color": "red",
           "source":"sound/แคร่/รอ.mp3",
           "swap":"0"
         },
+        {
+          "char": "แ",
+          "color": "green",
+          "source":"sound/แคร่/แอ.mp3",
+          "swap":"2"
+        },
+  
   
         {
           "char": "",

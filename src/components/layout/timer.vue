@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      Minute: 30,
+      Minute: 2,
       Second: 0,
       displayMinute: "",
       displaySecond: "",
