@@ -206,18 +206,18 @@ export default {
           }
           else{
             let lastStrings =
-              "<span style='letterSpacing:20px; font-size:"+(this.percent(this.fontSize , 100 )) +"px; color: " +
+              "<b style='letterSpacing:100px; font-size:"+(this.percent(this.fontSize , 100 )) +"px; color: " +
               this.coloredString[index] +
               ";'>" +
               this.thisString[index] +
-              "</span>";
+              "</b>";
             lastString.push(lastStrings);
           }
 
         } 
         else {
           let lastStrings =
-            "<strong  style='letterSpacing:20px; font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
+            "<strong  style='letterSpacing:100px; font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
             this.coloredString[index] +
             ";'>" +
             this.thisString[index] +
@@ -250,10 +250,12 @@ export default {
       window.addEventListener("keypress", (event) => {
         console.log(event.code)
         if(event.code === 'KeyR'){
-          if(!this.isPlay)
-          console.log("restart")
-          this.j = this.previusJ
-          this.playSound();
+          if(!this.isPlay){
+
+            console.log("restart")
+            this.j = this.previusJ
+            this.playSound();
+          }
         }
         if(event.code === 'Space'){
           console.log("play " + this.isPlay)
@@ -265,7 +267,7 @@ export default {
             var para3 = document.getElementById("tempText");
             this.thisString = []  
             this.coloredString= [],
-            para.innerHTML = "<p style='font-size:"+ this.fontSize+"px ;color:red ;  text-align: center '>+</p>";
+            para.innerHTML = "<p style='font-size:"+ (this.percent(this.fontSize, 150))+"px ;color:black ;  text-align: center '>+</p>";
             para2.innerHTML = "";
             para3.innerHTML = "";
             this.j= this.random(0,this.letter.length,this.arrayPool)
@@ -285,7 +287,7 @@ export default {
 };
 </script>
 
-<style>
+<style >
 @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
 
 
@@ -310,6 +312,11 @@ div.text_position{
  
 }
 strong{
-  letter-spacing:20px;
+  letter-spacing:30px;
 }
+b{
+    letter-spacing:30px;
+    font-weight: 399 !important;
+}
+
 </style>
