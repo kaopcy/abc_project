@@ -12,7 +12,7 @@
     <div  style="text-align: center;" >
       <div id="tempText" style="display: inline ; top: 0px; width: 100%"></div> 
     </div>
-
+    
     <div v-if="!isPlay">
       <p id="plus"></p>
     </div>
@@ -45,12 +45,12 @@ export default {
       startApp:false,           //Boolean for sent data back to timer
       currentString: "",
       //Text style 
-      fontSize:350,             //text size
+      fontSize:400,             //text size
       styleObject: {
-        top: '116px',
+        top: '200px',
         color: 'blue',
         position: 'fixed',
-        left: '666px', 
+        left: '10px', 
       },
     };
   },
@@ -96,6 +96,7 @@ export default {
               this.isPlay = false;
               this.isStop = true;
               console.log(this.currentString)
+              console.log(this.arrayPool)
             }
             if (!this.isStop) {
               setTimeout(()=>{
@@ -110,11 +111,7 @@ export default {
         if (!this.isStop) this.playSound();
       }
     },
-
-    
-    //main fucntion for makeing string
-    makeString: function() {
-      var para = document.getElementById("para");
+    makeTempString(){
       var tempText = document.getElementById("tempText");
       var invisString = [];
       var lastInvis = [];
@@ -139,7 +136,7 @@ export default {
       for (let index = 0; index < invisString.length; index++) {    //makeing array of html text 
         
           let lastInvis1 =
-            "<strong  style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; opacity:0% ; font-weight: 401 !important; color: " +
+            "<strong  style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; opacity:2% ; font-weight: 401 !important; color: " +
             this.coloredString[index] +
             ";'>" +
             invisString[index] +
@@ -149,7 +146,15 @@ export default {
       }
       tempText.innerHTML = lastInvis.join("")
       this.currentString = invisString.join("")
+        this.styleObject.left = tempText.offsetLeft + "px"
+        
 
+    },
+    
+    //main fucntion for makeing string
+    makeString: function() {
+      var para = document.getElementById("para");
+      
       //******This for RealString*******
       var lastString = [];
       if (this.letter[this.j][this.i].swap === "0") {
@@ -174,7 +179,6 @@ export default {
       for (let index = 0; index < this.thisString.length; index++) {
         if (this.coloredString[index] == "blue") {
             if(this.thisString[index-1] === 'ั' ||this.thisString[index-1] === 'ิ'||this.thisString[index-1] === 'ี'||this.thisString[index-1] === 'ึ'  || this.thisString[index-1] === 'ื'){
-              console.log("in upper casestatement")
               let lastStrings =
               "<sup style='font-size:"+(this.percent(this.fontSize , 85 )) +"px; color: " +
               this.coloredString[index] +
@@ -185,19 +189,21 @@ export default {
             }
             else{
               let lastStrings =
-              "<span style='font-size:"+(this.percent(this.fontSize , 96.25 )) +"px; color: " +
+              "<b style='font-size:"+(this.percent(this.fontSize , 96.25 )) +"px; color: " +
               this.coloredString[index] +
               "; font-weight: 389 ;'>" +
               this.thisString[index] +
-              "</span>";
+              "</b>";
               lastString.push(lastStrings);
             }
           
         } 
         else if (this.coloredString[index] == "green") {
-          if(this.thisString[index] === 'ั' ||this.thisString[index] === 'ิ'||this.thisString[index] === 'ี'||this.thisString[index] === 'ึ'  || this.thisString[index] === 'ื'){
+          if( this.thisString[index] === 'ุ'             //สระอุ
+          ||  this.thisString[index] === 'ู')             //สระอุ
+          {
             let lastStrings =
-              "<span style='font-size:"+(this.percent(this.fontSize , 100 )) +"px; color: " +
+              "<span style='font-size:"+(this.percent(this.fontSize , 75 )) +"px; color: " +
               this.coloredString[index] +
               ";'>" +
               this.thisString[index] +
@@ -213,22 +219,30 @@ export default {
               "</b>";
             lastString.push(lastStrings);
           }
-
         } 
         else {
-          let lastStrings =
-            "<strong  style='letterSpacing:100px; font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
-            this.coloredString[index] +
-            ";'>" +
-            this.thisString[index] +
-            "</strong>";
-          lastString.push(lastStrings);
+          if(this.coloredString[index-1] !== "blue"){
+            let lastStrings =
+              "<strong  style='letterSpacing:100px; font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
+              this.coloredString[index] +
+              ";'>" +
+              this.thisString[index] +
+              "</strong>";
+            lastString.push(lastStrings);
+          }
+          else{
+            let lastStrings =
+              "<strong :class='strongID' style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
+              this.coloredString[index] +
+              ";'>" +
+              this.thisString[index] +
+              "</strong>";
+            lastString.push(lastStrings);
+            
+          }
         }
       }
-
       para.innerHTML = lastString.join("");
-      this.styleObject.left = tempText.offsetLeft + "px"
-      
     },
     //this function use to swap array of string
     swap(thisstring, character, num) {
@@ -236,30 +250,20 @@ export default {
       return thisstring;
     },
 
-    readJson(){
-      const customer = require('./assets/letter/letter.json')
-      var log = customer.letters
-      console.log(log[0][0].char)
-      console.log(customer.src)
-    }
+    
 
   },
   mounted: function() {
-    this.readJson()
     //add event when user interact with keyboard
-      window.addEventListener("keypress", (event) => {
+      window.addEventListener("keyup", (event) => {
         console.log(event.code)
         if(event.code === 'KeyR'){
-          if(!this.isPlay){
-
-            console.log("restart")
+          if(!this.isPlay){      
             this.j = this.previusJ
             this.playSound();
           }
         }
         if(event.code === 'Space'){
-          console.log("play " + this.isPlay)
-          console.log("play " + this.isStop)
           if(!this.startApp) this.startApp = true //To return that game start
           if(!this.isPlay){
             var para = document.getElementById("plus");
@@ -273,8 +277,8 @@ export default {
             this.j= this.random(0,this.letter.length,this.arrayPool)
             this.previusJ = this.j
           setTimeout(()=>{
-            
           if (!this.isPlay) {
+              this.makeTempString()
               this.playSound();
               
             }
@@ -289,7 +293,15 @@ export default {
 
 <style >
 @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
-
+.image_style{
+  position: relative;
+  z-index: -900;
+  width: 5%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
 
 * {
   padding: 0;
@@ -297,26 +309,28 @@ export default {
   box-sizing: border-box;
   font-family: 'Sarabun', sans-serif;
 }
+
 div.text_position{
   position:static;
   text-align: center;
   font-size: 400px;
   
 }
+
 .center {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 1080px;
   border: 3px solid green; 
- 
 }
+
 strong{
-  letter-spacing:30px;
+  
 }
+
 b{
-    letter-spacing:30px;
-    font-weight: 399 !important;
+  font-weight: 399 !important;
 }
 
 </style>
