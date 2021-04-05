@@ -9,7 +9,7 @@
                     <input  v-model="studentName" class="c-form__input" placeholder="Insert name" type="email" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" required>
                     <label class="c-form__buttonLabel" for="checkbox">
                       <div class="learn-more">
-                        <button @click="startState();" class="learn-more" type="button">Start</button>
+                        <button @click="studentName ? startState() : ''" class="learn-more" type="button">Start</button>
                       </div>
                     </label>
                     <label class="c-form__toggle" for="checkbox" data-title="PLAY"></label>
