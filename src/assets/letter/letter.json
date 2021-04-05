@@ -4,7 +4,7 @@
         {
           "char": "ก",
           "color": "black",
-          "source":"consonant/กอ.mp3",
+          "source":"",
           "swap":"0"
         },
         {
@@ -68,10 +68,26 @@
           "color": "black",
           "source":"consonant/คอ.mp3",
           "swap":"0"
+        }
+      ],
+      [
+        {
+          "char": "ด",
+          "color": "black",
+          "source":"consonant/ดอ.mp3",
+          "swap":"0"
+        }
+      ],
+      [
+        {
+          "char": "ค",
+          "color": "black",
+          "source":"consonant/คอ.mp3",
+          "swap":"0"
         },
         {
           "char": "ร",
-          "color": "red",
+          "color": "black",
           "source":"consonant/รอ.mp3",
           "swap":"0"
         },

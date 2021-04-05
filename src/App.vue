@@ -2,8 +2,19 @@
   <div>
     <!-- When in naming State -->
     <div v-if="state === 'nameState'">
-        <div class="learn-more">
-          <button @click="startState(); " class="learn-more">start</button>
+        <div class="inputbody">
+            <input class="c-checkbox" type="checkbox" id="checkbox">
+            <div class="c-formContainer">
+                <form class="c-form" action="">
+                    <input  v-model="studentName" class="c-form__input" placeholder="Insert name" type="email" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" required>
+                    <label class="c-form__buttonLabel" for="checkbox">
+                      <div class="learn-more">
+                        <button @click="startState();" class="learn-more" type="button">Start</button>
+                      </div>
+                    </label>
+                    <label class="c-form__toggle" for="checkbox" data-title="PLAY"></label>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -37,6 +48,13 @@
         <p class="popout">
           <span>E</span><span>N</span><span>D</span><span>I</span><span>N</span><span>G</span>
         </p>
+        <div class="wrap">
+            
+                <a href="#" class="underlined underlined--reverse">
+                  "{{studentName}}" got {{arrayPool.length}}
+                </a>
+            
+        </div>  
     </div>
 
 
@@ -56,6 +74,7 @@ export default {
   data() {
     return {
       state: "nameState",
+      studentName: '',
       myTrack: new Audio(),
       letter: json.letters,     //Import json file
       i: 0,                     //This integer for what number of alphabet in word              
@@ -280,6 +299,10 @@ export default {
       return thisstring;
     },
     runningFunction(){
+      if(this.state === 'endState'){
+        var para = document.getElementById("endScore");
+        para.innerHTML = "sads";
+      }
       if(!this.startApp) this.startApp = true //To return that game start
             if(this.isRecord === true){
               this.isRecord = false;
@@ -322,9 +345,11 @@ export default {
 
     //When app in name state
     window.addEventListener("keypress", (event) => {
+      
       console.log(this.state)
       if(this.state === 'nameState'){
-
+        if(event.code === 'Enter')
+        this.startState();
       }
       else if(this.state === 'runState'){
         if(event.code === 'Space'){
@@ -370,6 +395,7 @@ export default {
 
 <style >
 @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
+@import 'style1.css';
 .image_style{
   position: fixed;
   width: 20%;
@@ -406,119 +432,6 @@ export default {
 
 b{
   font-weight: 399 !important;
-}
-
-/* For animation button */
-@import url('https://fonts.googleapis.com/css?family=Rubik:700&display=swap');
-div.learn-more {
-	 font-family: 'Rubik', sans-serif;
-	 font-size: 1rem;
-	 line-height: 1.5;
-	 display: flex;
-	 align-items: center;
-	 justify-content: center;
-	 margin: 0;
-	 min-height: 100vh;
-	 background: #fff;
-}
- button {
-	 position: relative;
-	 display: inline-block;
-	 cursor: pointer;
-	 outline: none;
-	 border: 0;
-	 vertical-align: middle;
-	 text-decoration: none;
-	 font-size: inherit;
-	 font-family: inherit;
-}
- button.learn-more {
-   font-size: 100px;
-	 font-weight: 600;
-	 color: #382b22;
-	 text-transform: uppercase;
-	 padding: 1.25em 2em;
-	 background: #fff0f0;
-	 border: 2px solid #b18597;
-	 border-radius: 0.75em;
-	 transform-style: preserve-3d;
-	 transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
-}
- button.learn-more::before {
-	 position: absolute;
-	 content: '';
-	 width: 100%;
-	 height: 100%;
-	 top: 0;
-	 left: 0;
-	 right: 0;
-	 bottom: 0;
-	 background: #f9c4d2;
-	 border-radius: inherit;
-	 box-shadow: 0 0 0 2px #b18597, 0 0.625em 0 0 #ffe3e2;
-	 transform: translate3d(0, 0.75em, -1em);
-	 transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
-}
- button.learn-more:hover {
-	 background: #ffe9e9;
-	 transform: translate(0, 0.25em);
-}
- button.learn-more:hover::before {
-	 box-shadow: 0 0 0 2px #b18597, 0 0.5em 0 0 #ffe3e2;
-	 transform: translate3d(0, 0.5em, -1em);
-}
- button.learn-more:active {
-	 background: #ffe9e9;
-	 transform: translate(0em, 0.75em);
-}
- button.learn-more:active::before {
-	 box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
-	 transform: translate3d(0, 0, -1em);
-}
-
-/* for animation ending */
-.popout {
-  text-align: center;
-	 font-family: Futura, sans-serif;
-	 font-weight: 900;
-	 font-size: 350px;
-	 padding: 80px;
-}
- @keyframes ani {
-	 0% {
-		 transform: translate3d(0, 0, 0);
-		 text-shadow: 0em 0em 0 lightblue;
-		 color: black;
-	}
-	 30% {
-		 transform: translate3d(0, 0, 0);
-		 text-shadow: 0em 0em 0 lightblue;
-		 color: black;
-	}
-	 70% {
-		 transform: translate3d(0.08em, -0.08em, 0);
-		 text-shadow: -0.08em 0.08em lightblue;
-		 color: black;
-	}
-	 100% {
-		 transform: translate3d(0.08em, -0.08em, 0);
-		 text-shadow: -0.08em 0.08em lightblue;
-		 color: black;
-	}
-}
- .popout span {
-	 position: relative;
-	 display: inline-block;
-	 animation: ani 1s infinite alternate cubic-bezier(0.86, 0, 0.07, 1);
-}
- .popout span:nth-last-child(1n) {
-	 animation-delay: -0.1666666667s;
-}
- .popout span:nth-last-child(2n) {
-	 animation-delay: -0.3333333333s;
-}
- .popout span:nth-last-child(3n) {
-	 animation-delay: -0.5s;
 }
 
 </style>

@@ -20,7 +20,7 @@ export default {
       displaySecond: "00",
       test:true,
       isEnd: false,
-      all:5,
+      all:10,
     };
   },
   methods: {},
@@ -42,7 +42,6 @@ export default {
         else{
           this.isEnd = true;
           this.$emit("takeEnd",this.isEnd)
-          console.log("i sas")
         }
 
         
