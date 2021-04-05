@@ -2,7 +2,7 @@
   <div id="timer">
     <span style="position: absolute;
     bottom: 0;
-    left: 0;">Time {{displayMinute}}:{{displaySecond}}</span>
+    left: 0;">Time {{displayMinute}}:{{displaySecond}} Difficult: {{difficult}}</span>
   </div>
 </template>
 
@@ -14,18 +14,22 @@ export default {
   },
   data() {
     return {
+      difficult: "easy",
       Minute: 0,
       Second: 15,
       displayMinute: "00",
       displaySecond: "00",
       test:true,
       isEnd: false,
-      all:10,
+      all:120,
+      stage:0,
     };
   },
   methods: {},
   mounted() {
+    this.stage = this.all / 3
     setInterval(() => {
+      
       if(this.startApp ){
         if(this.all > 0){
           this.all-=1
@@ -44,6 +48,19 @@ export default {
           this.$emit("takeEnd",this.isEnd)
         }
 
+        //Check for difficult
+        if(this.all > this.stage * 2){
+          this.difficult = 'easy';
+          this.$emit('takeDifficult',this.difficult)
+        }
+        else if(this.all > this.stage && this.all <= this.stage * 2){
+          this.difficult = 'normal';
+          this.$emit('takeDifficult',this.difficult)
+        }
+        else{
+          this.difficult = 'hard'
+          this.$emit('takeDifficult',this.difficult)
+        }
         
 
       }

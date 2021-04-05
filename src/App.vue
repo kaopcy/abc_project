@@ -16,12 +16,13 @@
                 </form>
             </div>
         </div>
+        
     </div>
 
     <!-- When in running State -->
     <div v-if="state === 'runState'"> 
         <div>
-            <timer @takeEnd="takeEnd" v-bind:start-app="startApp" />
+            <timer @takeEnd="takeEnd" @takeDifficult="takeDifficult"  v-bind:start-app="startApp" />
         </div>
         <!-- display Real text -->
         <div v-bind:style="styleObject">
@@ -62,7 +63,9 @@
 </template>
 
 <script>
-import json from "@/assets/letter/letter.json";
+import json from "@/assets/letter/wordeasy.json";
+import json2 from "@/assets/letter/wordmedium.json";
+import json3 from "@/assets/letter/wordhard.json";
 import timer from "@/components/layout/timer.vue";
 
 export default {
@@ -73,10 +76,11 @@ export default {
 
   data() {
     return {
+      difficult: 'easy',
       state: "nameState",
       studentName: '',
       myTrack: new Audio(),
-      letter: json.letters,     //Import json file
+      letter: json.wordeasy,     //Import json file
       i: 0,                     //This integer for what number of alphabet in word              
       j: 0,                     //This integer for what number of word
       previusJ:0,
@@ -89,6 +93,7 @@ export default {
       arrayPool: [],            //Use to collect rendered word
       startApp:false,           //Boolean for sent data back to timer
       currentString: "",
+
       //Text style 
       fontSize:400,             //text size
       styleObject: {
@@ -105,6 +110,11 @@ export default {
         this.isEnd = value;
         this.state = "endState"
     },
+    takeDifficult(value){
+        this.difficult = value;
+        console.log(this.difficult)
+    },
+
     //To get random number from word pool
     random(min,max,arrayPool) {
     var i = Math.floor(Math.random()*(max-min))+min;
@@ -150,7 +160,7 @@ export default {
             if (!this.isStop) {
               setTimeout(()=>{
                 this.playSound();
-              },100)
+              },500)
             }
           }.bind(this)
         );
@@ -160,6 +170,8 @@ export default {
         if (!this.isStop) this.playSound();
       }
     },
+
+    //make String for position
     makeTempString(){
       var tempText = document.getElementById("tempText");
       var invisString = [];
@@ -200,7 +212,7 @@ export default {
 
     },
     
-    //main fucntion for makeing string
+    //main fucntion for making string
     makeString: function() {
       var para = document.getElementById("para");
       
@@ -252,7 +264,7 @@ export default {
           ||  this.thisString[index] === 'ู')             //สระอุ
           {
             let lastStrings =
-              "<span style='font-size:"+(this.percent(this.fontSize , 75 )) +"px; color: " +
+              "<span class='spanID' style='font-size:"+(this.percent(this.fontSize , 75 )) +"px; color: " +
               this.coloredString[index] +
               ";'>" +
               this.thisString[index] +
@@ -261,7 +273,7 @@ export default {
           }
           else{
             let lastStrings =
-              "<b style='letterSpacing:100px; font-size:"+(this.percent(this.fontSize , 100 )) +"px; color: " +
+              "<b class='bID' style='font-size:"+(this.percent(this.fontSize , 100 )) +"px; color: " +
               this.coloredString[index] +
               ";'>" +
               this.thisString[index] +
@@ -270,9 +282,12 @@ export default {
           }
         } 
         else {
-          if(this.coloredString[index-1] !== "blue"){
+          if(this.thisString[index+1] === "ุ" || this.thisString[index+1] === "ู"
+          || this.thisString[index+1] === "ิ" || this.thisString[index+1] === "ี"
+          || this.thisString[index+1] === "ึ" || this.thisString[index+1] === "ื"
+          ){
             let lastStrings =
-              "<strong  style='letterSpacing:100px; font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
+              "<strong class='strongID2' style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
               this.coloredString[index] +
               ";'>" +
               this.thisString[index] +
@@ -281,7 +296,7 @@ export default {
           }
           else{
             let lastStrings =
-              "<strong :class='strongID' style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
+              "<strong class='strongID' style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
               this.coloredString[index] +
               ";'>" +
               this.thisString[index] +
@@ -298,7 +313,19 @@ export default {
       thisstring.splice(thisstring.length - num, 0, character);
       return thisstring;
     },
+
+    //Call this function when want to start to run
     runningFunction(){
+      if(this.difficult === 'easy'){
+        this.letter = json.wordeasy;
+      }
+      else if(this.difficult === 'normal'){
+        this.letter = json2.wordmedium;
+      }
+      else if(this.difficult === 'hard'){
+        this.letter = json3.wordhard;
+      }
+
       if(this.state === 'endState'){
         var para = document.getElementById("endScore");
         para.innerHTML = "sads";
@@ -326,18 +353,21 @@ export default {
             },2000)
             }
     },
+
+    
     turnRecord(){
       if(!this.isPlay && this.isRecord === false){
             this.isRecord = true;
         }
     },
+
+
     startState(){
       this.state = 'runState' ; 
       setTimeout(()=>{
             this.turnRecord() ; 
             this.runningFunction();
             },100)
-      
     }
 
   },
@@ -431,7 +461,21 @@ export default {
 }
 
 b{
+  
   font-weight: 399 !important;
 }
+strong.strongID{
+  letter-spacing: 40px;
+}
+strong.strongID2{
+  letter-spacing: 0px;
+}
+span.spanID{
+letter-spacing: 40px;
+}
+b.bID{
+letter-spacing: 40px;
+}
+
 
 </style>
