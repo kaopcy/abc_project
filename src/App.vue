@@ -63,9 +63,16 @@
 </template>
 
 <script>
-import json from "@/assets/letter/wordeasy.json";
-import json2 from "@/assets/letter/wordmedium.json";
-import json3 from "@/assets/letter/wordhard.json";
+import json from  "@/assets/letter/level4.json";
+import json2 from "@/assets/letter/level5.json";
+import json3 from "@/assets/letter/level6.json";
+import json4 from "@/assets/letter/level7.json";
+import json5 from "@/assets/letter/level8.json";
+import json6 from "@/assets/letter/level9.json";
+import json7 from "@/assets/letter/level10.json";
+
+
+
 import timer from "@/components/layout/timer.vue";
 
 export default {
@@ -80,7 +87,7 @@ export default {
       state: "nameState",
       studentName: '',
       myTrack: new Audio(),
-      letter: json.wordeasy,     //Import json file
+      letter: json.level4,     //Import json file
       i: 0,                     //This integer for what number of alphabet in word              
       j: 0,                     //This integer for what number of word
       previusJ:0,
@@ -250,7 +257,7 @@ export default {
             }
             else{
               let lastStrings =
-              "<b style='font-size:"+(this.percent(this.fontSize , 96.25 )) +"px; color: " +
+              "<b class='bID' style='font-size:"+(this.percent(this.fontSize , 96.25 )) +"px; color: " +
               this.coloredString[index] +
               "; font-weight: 389 ;'>" +
               this.thisString[index] +
@@ -285,6 +292,8 @@ export default {
           if(this.thisString[index+1] === "ุ" || this.thisString[index+1] === "ู"
           || this.thisString[index+1] === "ิ" || this.thisString[index+1] === "ี"
           || this.thisString[index+1] === "ึ" || this.thisString[index+1] === "ื"
+          || this.thisString[index+1] === "่" || this.thisString[index+1] === "้"
+          || this.thisString[index+1] === "๊" || this.thisString[index+1] === "๋"
           ){
             let lastStrings =
               "<strong class='strongID2' style='font-size:"+(this.percent(this.fontSize , 100.5 )) +"px; font-weight: 401 !important; color: " +
@@ -316,15 +325,28 @@ export default {
 
     //Call this function when want to start to run
     runningFunction(){
-      if(this.difficult === 'easy'){
-        this.letter = json.wordeasy;
+      if     (this.difficult == 1){
+        this.letter = json.level4;
       }
-      else if(this.difficult === 'normal'){
-        this.letter = json2.wordmedium;
+      else if(this.difficult == 2){
+        this.letter = json2.level5;
       }
-      else if(this.difficult === 'hard'){
-        this.letter = json3.wordhard;
+      else if(this.difficult == 3){
+        this.letter = json3.level6;
       }
+      else if(this.difficult == 4){
+        this.letter = json4.level7;
+      }
+      else if(this.difficult == 5){
+        this.letter = json5.level8;
+      }
+      else if(this.difficult == 6){
+        this.letter = json6.level9;
+      }
+      else if(this.difficult == 7){
+        this.letter = json7.level10;
+      }
+  
 
       if(this.state === 'endState'){
         var para = document.getElementById("endScore");

@@ -11,36 +11,46 @@ export default {
   name: "timer",
   props:{
     startApp:Boolean,
+    
   },
+
   data() {
     return {
-      difficult: "easy",
+      difficult: 1,
       Minute: 0,
       Second: 15,
       displayMinute: "00",
       displaySecond: "00",
       test:true,
       isEnd: false,
-      all:120,
+      all:70,
       stage:0,
     };
   },
   methods: {},
   mounted() {
-    this.stage = this.all / 3
+    this.stage = this.all / 7
     setInterval(() => {
       
+      console.log(this.Second)
       if(this.startApp ){
-        if(this.all > 0){
-          this.all-=1
+        if(this.all > 0 ){
+          this.all--
           this.Second = this.all%60
           this.Minute = parseInt(this.all/60)
+
+
           if(this.Second < 10){
             this.displaySecond = "0"+this.Second
           }
           else{
-            this.displayMinute = this.Minute
             this.displaySecond = this.Second
+          }
+          if(this.Minute < 10){
+            this.displayMinute = "0"+this.Minute
+          }
+          else{
+            this.displayMinute = this.Minute
           }
         }
         else{
@@ -49,20 +59,10 @@ export default {
         }
 
         //Check for difficult
-        if(this.all > this.stage * 2){
-          this.difficult = 'easy';
+        if(this.all % this.stage == 0 ){
+          this.difficult +=1;
           this.$emit('takeDifficult',this.difficult)
         }
-        else if(this.all > this.stage && this.all <= this.stage * 2){
-          this.difficult = 'normal';
-          this.$emit('takeDifficult',this.difficult)
-        }
-        else{
-          this.difficult = 'hard'
-          this.$emit('takeDifficult',this.difficult)
-        }
-        
-
       }
     }, 1000);
   },
